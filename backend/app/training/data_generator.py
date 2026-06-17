@@ -6,6 +6,8 @@ from pathlib import Path
 import yaml
 import structlog
 from faker import Faker
+from dotenv import load_dotenv
+load_dotenv()
 
 log = structlog.get_logger()
 

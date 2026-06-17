@@ -11,7 +11,7 @@ log = structlog.get_logger()
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
-GROQ_MODEL      = "llama3-8b-8192"   # fast, cheap, good enough for classification
+GROQ_MODEL = "llama-3.1-8b-instant"   # fast, cheap, good enough for classification
 MAX_TOKENS      = 20                  # we only need one word back
 TEMPERATURE     = 0.0                 # deterministic — classification is not creative
 VALID_CATEGORIES = {c.value for c in LogCategory if c != LogCategory.UNKNOWN}
