@@ -1,0 +1,79 @@
+# SECURITY_ALERT:
+#   - "multiple.{0,10}login.{0,10}fail"
+#   - "unauthorized.{0,10}access"
+#   - "authentication.{0,10}error"
+#   - "potential.{0,10}(security.{0,10}breach|intrusion)"
+#   - "brute.{0,10}force"
+#   - "suspicious.{0,10}activity"
+#   - "account.{0,10}locked"
+#   - "invalid.{0,10}(credentials|token|session)"
+
+# RESOURCE_USAGE:
+#   - "phys_ram=\\d+MB"
+#   - "used_ram=\\d+MB"
+#   - "cpu.{0,10}\\d+(\\.\\d+)?\\s*%"
+#   - "memory.{0,10}\\d+(\\.\\d+)?\\s*(MB|GB|%)"
+#   - "disk.{0,10}\\d+(\\.\\d+)?\\s*(GB|TB|%)"
+#   - "\\[instance:\\s*[a-z0-9]+\\]"
+#   - "swap.{0,10}\\d+MB"
+
+# WORKFLOW_ERROR:
+#   - "escalation.{0,10}(rule.{0,10})?(fail|error)"
+#   - "task.{0,10}assignment.{0,10}(fail|could not|error)"
+#   - "invalid.{0,10}priority"
+#   - "undefined.{0,10}escalation"
+#   - "workflow.{0,10}(fail|error|invalid)"
+#   - "ticket.{0,10}\\d+.{0,20}(fail|error|undefined)"
+#   - "process.{0,10}(timeout|deadlock|blocked)"
+
+# SYSTEM_EVENT:
+#   - "service.{0,10}(started|stopped|restarted|running)"
+#   - "backup.{0,10}(completed|started|failed)"
+#   - "node.{0,10}(joined|left|disconnected).{0,10}cluster"
+#   - "deployment.{0,10}(success|complete|finished)"
+#   - "instance.{0,10}(created|terminated|launched)"
+#   - "health.{0,10}check.{0,10}(pass|ok|success)"
+#   - "scheduled.{0,10}(job|task).{0,10}(started|completed)"
+  
+
+  # Priority order matters — SECURITY_ALERT first (highest business impact)
+# Patterns use .{0,10} bounded wildcards to prevent catastrophic backtracking
+
+SECURITY_ALERT:
+  - "multiple.{0,10}login.{0,10}fail"
+  - "unauthorized.{0,10}access"
+  - "authentication.{0,10}error"
+  - "potential.{0,10}(security.{0,10}breach|intrusion)"
+  - "brute.{0,10}force"
+  - "suspicious.{0,10}activity"
+  - "account.{0,10}locked"
+  - "invalid.{0,10}(credentials|token|session)"
+
+RESOURCE_USAGE:
+  - "phys_ram=\\d+MB"
+  - "used_ram=\\d+MB"
+  - "cpu.{0,10}\\d+(\\.\\d+)?\\s*%"
+  - "memory.{0,10}\\d+(\\.\\d+)?\\s*(MB|GB|%)"
+  - "disk.{0,10}\\d+(\\.\\d+)?\\s*(GB|TB|%)"
+  - "\\[instance:\\s*[a-z0-9]+\\]"
+  - "swap.{0,10}\\d+MB"
+  - "memory.{0,10}(critical|high|exceeded)"
+
+WORKFLOW_ERROR:
+  - "escalation.{0,10}(rule.{0,10})?(fail|error)"
+  - "task.{0,10}assignment.{0,10}(fail|could not|error)"
+  - "invalid.{0,10}priority"
+  - "undefined.{0,10}escalation"
+  - "workflow.{0,10}(fail|error|invalid)"
+  - "ticket.{0,10}\\d+.{0,20}(fail|error|undefined)"
+  - "process.{0,10}(timeout|deadlock|blocked)"
+  - "job.{0,10}(fail|error|abort)"
+
+SYSTEM_EVENT:
+  - "service.{0,10}(started|stopped|restarted|running)"
+  - "backup.{0,10}(completed|started|failed)"
+  - "node.{0,10}(joined|left|disconnected).{0,10}cluster"
+  - "deployment.{0,10}(success|complete|finished)"
+  - "instance.{0,10}(created|terminated|launched)"
+  - "health.{0,10}check.{0,10}(pass|ok|success)"
+  - "scheduled.{0,10}(job|task).{0,10}(started|completed)"
