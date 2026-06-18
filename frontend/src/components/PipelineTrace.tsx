@@ -1,66 +1,54 @@
-import { ClassifierTier, ClassifyResponse, TierTrace } from "@/types/classifier";
-import { cn } from "@/lib/utils";
+import { ClassifierTier } from "@/types/classifier";
 
 const TIERS: ClassifierTier[] = ["regex", "ml", "llm"];
 
-const tierLabel: Record<ClassifierTier, string> = {
+const TIER_LABEL: Record<ClassifierTier, string> = {
   regex: "Regex",
   ml:    "TF-IDF + LR",
   llm:   "Groq LLM",
 };
 
-function buildTrace(result: ClassifyResponse): TierTrace[] {
-  const used = result.classifier_used;
-  return TIERS.map((tier) => {
-    if (tier === used) {
-      return {
-        tier,
-        status: tier === "llm" ? "fallback" : "matched",
-      };
-    }
-    const tierIndex = TIERS.indexOf(tier);
-    const usedIndex = TIERS.indexOf(used);
-    return {
-      tier,
-      status: tierIndex < usedIndex ? "escalated" : "skipped",
-    };
-  });
-}
-
-const statusConfig = {
-  matched:  { dot: "bg-emerald-400", label: "matched",  text: "text-emerald-400" },
-  fallback: { dot: "bg-amber-400",   label: "fallback", text: "text-amber-400"   },
-  escalated:{ dot: "bg-zinc-600",    label: "passed",   text: "text-zinc-500"    },
-  skipped:  { dot: "bg-zinc-700",    label: "skipped",  text: "text-zinc-600"    },
-};
-
 interface PipelineTraceProps {
-  result: ClassifyResponse;
+  used: ClassifierTier;
+  dark: boolean;
 }
 
-export function PipelineTrace({ result }: PipelineTraceProps) {
-  const trace = buildTrace(result);
+export function PipelineTrace({ used, dark }: PipelineTraceProps) {
+  const usedIdx  = TIERS.indexOf(used);
+  const rowBg    = dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)";
+  const rowBdr   = dark ? "#1f1f1f" : "#e5e5e5";
+  const mutedClr = dark ? "#444"    : "#bbb";
+  const dimClr   = dark ? "#2a2a2a" : "#ddd";
 
   return (
-    <div className="space-y-1">
-      <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-3">
-        Pipeline Trace
-      </p>
-      {trace.map(({ tier, status }) => {
-        const cfg = statusConfig[status];
+    <div className="space-y-1.5">
+      {TIERS.map((tier, i) => {
+        const isUsed   = tier === used;
+        const isPassed = i < usedIdx;
+
         return (
           <div
             key={tier}
-            className="flex items-center justify-between py-2 px-3 rounded-md bg-zinc-900 border border-zinc-800"
+            className="flex items-center justify-between px-3 py-2 rounded-lg"
+            style={{ background: rowBg, border: `1px solid ${rowBdr}` }}
           >
             <div className="flex items-center gap-2.5">
-              <span className={cn("w-1.5 h-1.5 rounded-full", cfg.dot)} />
-              <span className="text-xs font-mono text-zinc-300">
-                {tierLabel[tier]}
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  isUsed ? "bg-emerald-400" : isPassed ? "bg-zinc-600" : "bg-zinc-800"
+                }`}
+              />
+              <span className="mono text-xs" style={{ color: isUsed ? (dark ? "#f0f0f0" : "#111") : mutedClr }}>
+                {TIER_LABEL[tier]}
               </span>
             </div>
-            <span className={cn("text-xs font-mono", cfg.text)}>
-              {cfg.label}
+            <span
+              className="mono text-xs"
+              style={{ color: isUsed ? "#6ee7b7" : isPassed ? mutedClr : dimClr }}
+            >
+              {isUsed
+                ? tier === "llm" ? "fallback" : "matched"
+                : isPassed ? "passed →" : "skipped"}
             </span>
           </div>
         );
